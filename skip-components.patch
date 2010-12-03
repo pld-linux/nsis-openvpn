@@ -1,0 +1,42 @@
+--- OpenVPN/openvpn-gui.nsi	2010-12-03 13:36:41.000000000 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 16:58:10.857685865 +0200
+@@ -231,6 +231,7 @@
+ 
+ SectionEnd
+ 
++!ifndef SKIP_EASYRSA
+ Section "OpenVPN RSA Certificate Management Scripts" SecOpenVPNEasyRSA
+ 
+   SetOverwrite on
+@@ -253,6 +254,7 @@
+   File "${HOME}\easy-rsa\serial.start"
+ 
+ SectionEnd
++!endif
+ 
+ Section "OpenVPN GUI" SecGUI
+ 
+@@ -280,6 +282,7 @@
+ Section "AutoStart OpenVPN GUI" SecGUIAuto
+ SectionEnd
+ 
++!ifndef SKIP_MYCERT
+ Section "My Certificate Wizard" SecMYCERT
+ 
+   SetOverwrite on
+@@ -288,6 +291,7 @@
+   File "${HOME}\mycertwizard\mycert.ini"
+ 
+ SectionEnd
++!endif
+ 
+ Section "Hide the TAP-Win32 Virtual Ethernet Adapter" SecTAPHidden
+ SectionEnd
+@@ -324,6 +328,7 @@
+ Section "OpenVPN File Associations" SecFileAssociation
+ SectionEnd
+ 
++!ifndef SKIP_OPENSSL
+ Section "OpenSSL DLLs" SecOpenSSLDLLs
+ 
+   SetOverwrite on
