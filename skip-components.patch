@@ -1,5 +1,5 @@
---- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:27:41.688132777 +0200
-+++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:06:57.143939787 +0200
+--- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:06:57.143939787 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:21:19.450540816 +0200
 @@ -106,7 +106,15 @@
  
    !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
@@ -17,7 +17,17 @@
  
    !define MUI_COMPONENTSPAGE_TEXT_TOP "Select the components to install/upgrade.  Stop any OpenVPN or OpenVPN GUI processes or the OpenVPN service if it is running."
  
-@@ -231,6 +239,7 @@
+@@ -163,7 +171,9 @@
+ 
+   LangString DESC_SecGUIAuto ${LANG_ENGLISH} "Automatically start OpenVPN GUI at system startup"
+ 
++!ifndef SKIP_MYCERT
+   LangString DESC_SecMYCERT ${LANG_ENGLISH} "Install My Certificate Wizard - A tool to create a certificate request."
++!endif
+ ;--------------------------------
+ ;Data
+   
+@@ -231,6 +241,7 @@
  
  SectionEnd
  
@@ -25,7 +35,7 @@
  Section "OpenVPN RSA Certificate Management Scripts" SecOpenVPNEasyRSA
  
    SetOverwrite on
-@@ -253,6 +262,7 @@
+@@ -253,6 +264,7 @@
    File "${HOME}\easy-rsa\serial.start"
  
  SectionEnd
@@ -33,7 +43,7 @@
  
  Section "OpenVPN GUI" SecGUI
  
-@@ -261,13 +271,15 @@
+@@ -261,13 +273,15 @@
    File "${HOME}\openvpn-gui.exe"
  
    # Include your custom config file(s) here.
@@ -50,7 +60,7 @@
  
    SetOutPath "$INSTDIR"
    File "${HOME}\install-win32\OpenVPN GUI ReadMe.txt"
-@@ -280,6 +292,7 @@
+@@ -280,6 +294,7 @@
  Section "AutoStart OpenVPN GUI" SecGUIAuto
  SectionEnd
  
@@ -58,7 +68,7 @@
  Section "My Certificate Wizard" SecMYCERT
  
    SetOverwrite on
-@@ -288,6 +301,7 @@
+@@ -288,6 +303,7 @@
    File "${HOME}\mycertwizard\mycert.ini"
  
  SectionEnd
@@ -66,7 +76,7 @@
  
  Section "Hide the TAP-Win32 Virtual Ethernet Adapter" SecTAPHidden
  SectionEnd
-@@ -307,11 +321,12 @@
+@@ -307,11 +323,12 @@
    FileWrite $R0 "process will be instantiated for each configuration file.$\r$\n"
    FileClose $R0
  
@@ -80,7 +90,7 @@
  
    CreateDirectory "$INSTDIR\log"
    FileOpen $R0 "$INSTDIR\log\README.txt" w
-@@ -324,6 +339,7 @@
+@@ -324,6 +341,7 @@
  Section "OpenVPN File Associations" SecFileAssociation
  SectionEnd
  
@@ -88,7 +98,7 @@
  Section "OpenSSL DLLs" SecOpenSSLDLLs
  
    SetOverwrite on
-@@ -344,6 +360,7 @@
+@@ -344,6 +362,7 @@
    File "${BIN}\libssl32.dll"
  
  SectionEnd
@@ -96,7 +106,23 @@
  
  Section "OpenSSL Utilities" SecOpenSSLUtilities
  
-@@ -643,8 +660,10 @@
+@@ -443,6 +462,7 @@
+ 
+ nogui:
+ 
++!ifndef SKIP_MYCERT
+   SectionGetFlags ${SecMYCERT} $R0
+   IntOp $R0 $R0 & ${SF_SELECTED}
+   IntCmp $R0 ${SF_SELECTED} "" nomycert nomycert
+@@ -450,6 +470,7 @@
+   CreateShortCut "$SMPROGRAMS\OpenVPN\My Certificate Wizard.lnk" "$INSTDIR\bin\mycert.exe"
+ 
+ nomycert:
++!endif
+ 
+ SectionEnd
+ 
+@@ -643,8 +664,10 @@
        CreateShortCut "$SMPROGRAMS\OpenVPN\OpenVPN log file directory.lnk" "$INSTDIR\log" ""
  
   samp_shortcut:
@@ -107,3 +133,29 @@
  
   genkey_shortcut:
      IfFileExists "$INSTDIR\bin\openvpn.exe" "" noshortcuts
+@@ -680,10 +703,14 @@
+ 
+ !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNUserSpace} $(DESC_SecOpenVPNUserSpace)
++!ifndef SKIP_EASYRSA
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNEasyRSA} $(DESC_SecOpenVPNEasyRSA)
++!endif
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecGUI} $(DESC_SecGUI)
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecGUIAuto} $(DESC_SecGUIAuto)
++!ifndef SKIP_MYCERT
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecMYCERT} $(DESC_SecMYCERT)
++!endif
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecTAP} $(DESC_SecTAP)
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecTAPHidden} $(DESC_SecTAPHidden)
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenSSLUtilities} $(DESC_SecOpenSSLUtilities)
+@@ -733,8 +760,10 @@
+   Pop $R1
+   Pop $R0
+ 
++!ifndef SKIP_MYCERT
+   ;Disable My Certificate Wizard as default.
+   SectionSetFlags ${SecMYCERT} 0
++!endif
+ 
+   ; Don't install the TAP driver as hiddden as default.
+   SectionSetFlags ${SecTAPHidden} 0
