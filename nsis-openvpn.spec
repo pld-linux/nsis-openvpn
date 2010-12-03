@@ -1,7 +1,7 @@
 Summary:	NSIS OpenVPN installer builder
 Name:		nsis-openvpn
 Version:	2.0.9
-Release:	0.15
+Release:	0.16
 # OpenVPN windows executable is GPL, no ideas about the rest
 License:	GPL
 Group:		Development/Tools
@@ -13,6 +13,7 @@ Patch0:		nsis-constants.patch
 Patch1:		skip-components.patch
 Patch2:		options-override.patch
 Patch3:		defaults.patch
+Patch4:		install-hook.patch
 BuildRequires:	rpmbuild(macros) >= 1.553
 BuildRequires:	unix2dos
 Requires:	nsis >= 2.34
@@ -32,6 +33,7 @@ OpenVPN installer for Windows.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 unix2dos openvpn-gui.nsi
