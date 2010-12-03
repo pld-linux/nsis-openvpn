@@ -1,5 +1,5 @@
---- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:10:53.461359172 +0200
-+++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:18:50.417769474 +0200
+--- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:18:50.417769474 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:27:41.688132777 +0200
 @@ -106,7 +106,15 @@
  
    !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
@@ -33,7 +33,24 @@
  
  Section "OpenVPN GUI" SecGUI
  
-@@ -280,6 +290,7 @@
+@@ -261,13 +271,15 @@
+   File "${HOME}\openvpn-gui.exe"
+ 
+   # Include your custom config file(s) here.
+-  SetOutPath "$INSTDIR\config"
++;  SetOutPath "$INSTDIR\config"
+   ;File "${HOME}\config\Office.ovpn"
+ 
++!ifndef SKIP_SAMPLE_CONFIG
+   SetOutPath "$INSTDIR\sample-config"
+   File "${HOME}\sample-config\sample.${SERV_CONFIG_EXT}"
+   File "${HOME}\sample-config\client.${SERV_CONFIG_EXT}"
+   File "${HOME}\sample-config\server.${SERV_CONFIG_EXT}"
++!endif
+ 
+   SetOutPath "$INSTDIR"
+   File "${HOME}\install-win32\OpenVPN GUI ReadMe.txt"
+@@ -280,6 +292,7 @@
  Section "AutoStart OpenVPN GUI" SecGUIAuto
  SectionEnd
  
@@ -41,7 +58,7 @@
  Section "My Certificate Wizard" SecMYCERT
  
    SetOverwrite on
-@@ -288,6 +299,7 @@
+@@ -288,6 +301,7 @@
    File "${HOME}\mycertwizard\mycert.ini"
  
  SectionEnd
@@ -49,7 +66,21 @@
  
  Section "Hide the TAP-Win32 Virtual Ethernet Adapter" SecTAPHidden
  SectionEnd
-@@ -324,6 +336,7 @@
+@@ -307,11 +321,12 @@
+   FileWrite $R0 "process will be instantiated for each configuration file.$\r$\n"
+   FileClose $R0
+ 
++!ifndef SKIP_SAMPLE_CONFIG
+   SetOutPath "$INSTDIR\sample-config"
+   File "${HOME}\sample-config\sample.${SERV_CONFIG_EXT}"
+   File "${HOME}\sample-config\client.${SERV_CONFIG_EXT}"
+   File "${HOME}\sample-config\server.${SERV_CONFIG_EXT}"
+-
++!endif
+ 
+   CreateDirectory "$INSTDIR\log"
+   FileOpen $R0 "$INSTDIR\log\README.txt" w
+@@ -324,6 +339,7 @@
  Section "OpenVPN File Associations" SecFileAssociation
  SectionEnd
  
@@ -57,7 +88,7 @@
  Section "OpenSSL DLLs" SecOpenSSLDLLs
  
    SetOverwrite on
-@@ -340,6 +353,7 @@
+@@ -340,6 +356,7 @@
    File "${BIN}\openssl.exe"
  
  SectionEnd
@@ -65,3 +96,14 @@
  
  Section "TAP-Win32 Virtual Ethernet Adapter" SecTAP
  
+@@ -643,8 +660,10 @@
+       CreateShortCut "$SMPROGRAMS\OpenVPN\OpenVPN log file directory.lnk" "$INSTDIR\log" ""
+ 
+  samp_shortcut:
++!ifndef SKIP_SAMPLE_CONFIG
+     IfFileExists "$INSTDIR\sample-config" "" genkey_shortcut
+       CreateShortCut "$SMPROGRAMS\OpenVPN\OpenVPN Sample Configuration Files.lnk" "$INSTDIR\sample-config" ""
++!endif
+ 
+  genkey_shortcut:
+     IfFileExists "$INSTDIR\bin\openvpn.exe" "" noshortcuts
