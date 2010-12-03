@@ -1,0 +1,13 @@
+--- nsis-openvpn-2.0.9/openvpn-gui.nsi~	2010-12-03 13:22:23.000000000 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 13:22:26.279396336 +0200
+@@ -218,8 +218,8 @@
+ ;--------------------------------
+ ;Installer Sections
+ 
+-!define SF_SELECTED   1
+-!define SF_RO         16
++;!define SF_SELECTED   1
++;!define SF_RO         16
+ !define SF_NOT_RO     0xFFFFFFEF
+ 
+ Section "OpenVPN User-Space Components" SecOpenVPNUserSpace

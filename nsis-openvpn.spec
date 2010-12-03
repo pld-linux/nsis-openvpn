@@ -6,10 +6,13 @@ Release:	0.1
 License:	GPL
 Group:		Development/Tools
 URL:		http://openvpn.se/files/howto/openvpn-howto_roll_your_own_installation_package.html
-Source0:	http://www.openvpn.se/files/install_packages_source/openvpn_install_source-2.0.9-gui-1.0.3.zip
+Source0:	http://www.openvpn.se/files/install_packages_source/openvpn_install_source-%{version}-gui-1.0.3.zip
 # NoSource0-md5:	64fce7dc20fdd991ffdee2cfce9dfb0b
 NoSource:	0
-Requires:	nsis
+Patch0:		nsis-constants.patch
+BuildRequires:	rpmbuild(macros) >= 1.553
+BuildRequires:	unix2dos
+Requires:	nsis >= 2.34
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -21,6 +24,11 @@ OpenVPN installer for Windows.
 
 %prep
 %setup -qc
+%undos openvpn-gui.nsi
+%patch0 -p1
+
+%build
+unix2dos openvpn-gui.nsi
 
 %install
 rm -rf $RPM_BUILD_ROOT
