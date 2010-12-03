@@ -1,5 +1,5 @@
---- nsis-openvpn-2.0.9-1/openvpn-gui.nsi	2010-12-03 18:26:58.650486303 +0200
-+++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:27:11.547377149 +0200
+--- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:27:11.547377149 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:34:31.377120791 +0200
 @@ -106,7 +106,15 @@
  
    !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
@@ -90,23 +90,23 @@
  
    CreateDirectory "$INSTDIR\log"
    FileOpen $R0 "$INSTDIR\log\README.txt" w
-@@ -324,6 +341,7 @@
- Section "OpenVPN File Associations" SecFileAssociation
+@@ -341,6 +358,7 @@
+ 
  SectionEnd
  
 +!ifndef SKIP_OPENSSL
- Section "OpenSSL DLLs" SecOpenSSLDLLs
+ Section "OpenSSL Utilities" SecOpenSSLUtilities
  
    SetOverwrite on
-@@ -332,6 +350,7 @@
-   File "${BIN}\libssl32.dll"
+@@ -348,6 +366,7 @@
+   File "${BIN}\openssl.exe"
  
  SectionEnd
 +!endif
  
- Section "OpenSSL Utilities" SecOpenSSLUtilities
+ Section "TAP-Win32 Virtual Ethernet Adapter" SecTAP
  
-@@ -435,6 +454,7 @@
+@@ -437,6 +456,7 @@
  
  nogui:
  
@@ -114,7 +114,7 @@
    SectionGetFlags ${SecMYCERT} $R0
    IntOp $R0 $R0 & ${SF_SELECTED}
    IntCmp $R0 ${SF_SELECTED} "" nomycert nomycert
-@@ -442,6 +462,7 @@
+@@ -444,6 +464,7 @@
    CreateShortCut "$SMPROGRAMS\OpenVPN\My Certificate Wizard.lnk" "$INSTDIR\bin\mycert.exe"
  
  nomycert:
@@ -122,7 +122,7 @@
  
  SectionEnd
  
-@@ -672,10 +695,14 @@
+@@ -676,10 +697,14 @@
  
  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNUserSpace} $(DESC_SecOpenVPNUserSpace)
@@ -137,7 +137,7 @@
    !insertmacro MUI_DESCRIPTION_TEXT ${SecTAP} $(DESC_SecTAP)
    !insertmacro MUI_DESCRIPTION_TEXT ${SecTAPHidden} $(DESC_SecTAPHidden)
    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenSSLUtilities} $(DESC_SecOpenSSLUtilities)
-@@ -725,8 +752,10 @@
+@@ -729,8 +754,10 @@
    Pop $R1
    Pop $R0
  
