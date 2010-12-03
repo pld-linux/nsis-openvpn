@@ -1,5 +1,5 @@
---- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:18:50.417769474 +0200
-+++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:27:41.688132777 +0200
+--- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:27:41.688132777 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:06:57.143939787 +0200
 @@ -106,7 +106,15 @@
  
    !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
@@ -88,13 +88,13 @@
  Section "OpenSSL DLLs" SecOpenSSLDLLs
  
    SetOverwrite on
-@@ -340,6 +356,7 @@
-   File "${BIN}\openssl.exe"
+@@ -344,6 +360,7 @@
+   File "${BIN}\libssl32.dll"
  
  SectionEnd
 +!endif
  
- Section "TAP-Win32 Virtual Ethernet Adapter" SecTAP
+ Section "OpenSSL Utilities" SecOpenSSLUtilities
  
 @@ -643,8 +660,10 @@
        CreateShortCut "$SMPROGRAMS\OpenVPN\OpenVPN log file directory.lnk" "$INSTDIR\log" ""
