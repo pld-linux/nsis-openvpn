@@ -1,6 +1,23 @@
---- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 16:58:10.857685865 +0200
-+++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:10:53.461359172 +0200
-@@ -231,6 +231,7 @@
+--- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:10:53.461359172 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 17:18:50.417769474 +0200
+@@ -106,7 +106,15 @@
+ 
+   !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
+ 
+-  !define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of:\r\n\r\nOpenVPN -  an Open Source VPN package by James Yonan.\r\n\r\nOpenVPN GUI - A Graphical User Interface for OpenVPN by Mathias Sundman\r\n\r\nMy Certificate Wizard - A tool to create a certificate request by Vlada Macek\r\n\r\nNote that the Windows version of OpenVPN will only run on Win 2000, XP, or higher.\r\n\r\n\r\n"
++  !define WELCOMEPAGE_TEXT_OPENVPN "OpenVPN -  an Open Source VPN package by James Yonan.\r\n\r\n"
++  !define WELCOMEPAGE_TEXT_OPENVPNGUI "OpenVPN GUI - A Graphical User Interface for OpenVPN by Mathias Sundman\r\n\r\n"
++!ifdef SKIP_MYCERT
++  !define WELCOMEPAGE_TEXT_MYCERT ""
++!else
++  !define WELCOMEPAGE_TEXT_MYCERT "My Certificate Wizard - A tool to create a certificate request by Vlada Macek\r\n\r\n"
++!endif
++
++  !define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of:\r\n\r\n${WELCOMEPAGE_TEXT_OPENVPN}${WELCOMEPAGE_TEXT_OPENVPNGUI}${WELCOMEPAGE_TEXT_MYCERT}Note that the Windows version of OpenVPN will only run on Win 2000, XP, or higher.\r\n\r\n\r\n"
+ 
+   !define MUI_COMPONENTSPAGE_TEXT_TOP "Select the components to install/upgrade.  Stop any OpenVPN or OpenVPN GUI processes or the OpenVPN service if it is running."
+ 
+@@ -231,6 +239,7 @@
  
  SectionEnd
  
@@ -8,7 +25,7 @@
  Section "OpenVPN RSA Certificate Management Scripts" SecOpenVPNEasyRSA
  
    SetOverwrite on
-@@ -253,6 +254,7 @@
+@@ -253,6 +262,7 @@
    File "${HOME}\easy-rsa\serial.start"
  
  SectionEnd
@@ -16,7 +33,7 @@
  
  Section "OpenVPN GUI" SecGUI
  
-@@ -280,6 +282,7 @@
+@@ -280,6 +290,7 @@
  Section "AutoStart OpenVPN GUI" SecGUIAuto
  SectionEnd
  
@@ -24,7 +41,7 @@
  Section "My Certificate Wizard" SecMYCERT
  
    SetOverwrite on
-@@ -288,6 +291,7 @@
+@@ -288,6 +299,7 @@
    File "${HOME}\mycertwizard\mycert.ini"
  
  SectionEnd
@@ -32,7 +49,7 @@
  
  Section "Hide the TAP-Win32 Virtual Ethernet Adapter" SecTAPHidden
  SectionEnd
-@@ -324,6 +328,7 @@
+@@ -324,6 +336,7 @@
  Section "OpenVPN File Associations" SecFileAssociation
  SectionEnd
  
@@ -40,7 +57,7 @@
  Section "OpenSSL DLLs" SecOpenSSLDLLs
  
    SetOverwrite on
-@@ -340,6 +345,7 @@
+@@ -340,6 +353,7 @@
    File "${BIN}\openssl.exe"
  
  SectionEnd
