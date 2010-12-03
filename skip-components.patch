@@ -122,17 +122,6 @@
  
  SectionEnd
  
-@@ -643,8 +664,10 @@
-       CreateShortCut "$SMPROGRAMS\OpenVPN\OpenVPN log file directory.lnk" "$INSTDIR\log" ""
- 
-  samp_shortcut:
-+!ifndef SKIP_SAMPLE_CONFIG
-     IfFileExists "$INSTDIR\sample-config" "" genkey_shortcut
-       CreateShortCut "$SMPROGRAMS\OpenVPN\OpenVPN Sample Configuration Files.lnk" "$INSTDIR\sample-config" ""
-+!endif
- 
-  genkey_shortcut:
-     IfFileExists "$INSTDIR\bin\openvpn.exe" "" noshortcuts
 @@ -672,10 +695,14 @@
  
  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
