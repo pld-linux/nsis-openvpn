@@ -1,5 +1,5 @@
---- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:27:11.547377149 +0200
-+++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:34:31.377120791 +0200
+--- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:34:31.377120791 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:36:25.740428053 +0200
 @@ -106,7 +106,15 @@
  
    !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
@@ -122,7 +122,7 @@
  
  SectionEnd
  
-@@ -676,10 +697,14 @@
+@@ -693,13 +693,19 @@
  
  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNUserSpace} $(DESC_SecOpenVPNUserSpace)
@@ -136,8 +136,13 @@
 +!endif
    !insertmacro MUI_DESCRIPTION_TEXT ${SecTAP} $(DESC_SecTAP)
    !insertmacro MUI_DESCRIPTION_TEXT ${SecTAPHidden} $(DESC_SecTAPHidden)
++!ifndef SKIP_OPENSSL
    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenSSLUtilities} $(DESC_SecOpenSSLUtilities)
-@@ -729,8 +754,10 @@
++!endif
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenSSLDLLs} $(DESC_SecOpenSSLDLLs)
+ ;  !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNSource} $(DESC_SecOpenVPNSource)
+   !insertmacro MUI_DESCRIPTION_TEXT ${SecAddPath} $(DESC_SecAddPath)
+@@ -729,8 +756,10 @@
    Pop $R1
    Pop $R0
  
