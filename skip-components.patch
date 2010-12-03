@@ -1,5 +1,5 @@
---- nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:06:57.143939787 +0200
-+++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:21:19.450540816 +0200
+--- nsis-openvpn-2.0.9-1/openvpn-gui.nsi	2010-12-03 18:26:58.650486303 +0200
++++ nsis-openvpn-2.0.9/openvpn-gui.nsi	2010-12-03 18:27:11.547377149 +0200
 @@ -106,7 +106,15 @@
  
    !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
@@ -17,7 +17,7 @@
  
    !define MUI_COMPONENTSPAGE_TEXT_TOP "Select the components to install/upgrade.  Stop any OpenVPN or OpenVPN GUI processes or the OpenVPN service if it is running."
  
-@@ -163,7 +171,9 @@
+@@ -155,7 +163,9 @@
  
    LangString DESC_SecGUIAuto ${LANG_ENGLISH} "Automatically start OpenVPN GUI at system startup"
  
@@ -98,7 +98,7 @@
  Section "OpenSSL DLLs" SecOpenSSLDLLs
  
    SetOverwrite on
-@@ -344,6 +362,7 @@
+@@ -332,6 +350,7 @@
    File "${BIN}\libssl32.dll"
  
  SectionEnd
@@ -106,7 +106,7 @@
  
  Section "OpenSSL Utilities" SecOpenSSLUtilities
  
-@@ -443,6 +462,7 @@
+@@ -435,6 +454,7 @@
  
  nogui:
  
@@ -114,7 +114,7 @@
    SectionGetFlags ${SecMYCERT} $R0
    IntOp $R0 $R0 & ${SF_SELECTED}
    IntCmp $R0 ${SF_SELECTED} "" nomycert nomycert
-@@ -450,6 +470,7 @@
+@@ -442,6 +462,7 @@
    CreateShortCut "$SMPROGRAMS\OpenVPN\My Certificate Wizard.lnk" "$INSTDIR\bin\mycert.exe"
  
  nomycert:
@@ -133,7 +133,7 @@
  
   genkey_shortcut:
      IfFileExists "$INSTDIR\bin\openvpn.exe" "" noshortcuts
-@@ -680,10 +703,14 @@
+@@ -672,10 +695,14 @@
  
  !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNUserSpace} $(DESC_SecOpenVPNUserSpace)
@@ -148,7 +148,7 @@
    !insertmacro MUI_DESCRIPTION_TEXT ${SecTAP} $(DESC_SecTAP)
    !insertmacro MUI_DESCRIPTION_TEXT ${SecTAPHidden} $(DESC_SecTAPHidden)
    !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenSSLUtilities} $(DESC_SecOpenSSLUtilities)
-@@ -733,8 +760,10 @@
+@@ -725,8 +752,10 @@
    Pop $R1
    Pop $R0
  
