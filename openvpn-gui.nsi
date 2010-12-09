@@ -291,6 +291,11 @@ Section "OpenVPN GUI" SecGUI
   File "${HOME}\sample-config\server.${SERV_CONFIG_EXT}"
 !endif
 
+; Extra install hooks included here
+!ifdef EXTRA_INSTALL_NSI
+  !include EXTRA_INSTALL_NSI
+!endif
+
   SetOutPath "$INSTDIR"
   File "${HOME}\install-win32\OpenVPN GUI ReadMe.txt"
 
