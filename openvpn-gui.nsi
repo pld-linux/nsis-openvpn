@@ -98,10 +98,18 @@
   !define MUI_FINISHPAGE_NOAUTOCLOSE
   !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
   !define MUI_ABORTWARNING
+!ifndef ICON
   !define MUI_ICON "${HOME}\install-win32\openvpn.ico"
-  !define MUI_UNICON "${HOME}\install-win32\openvpn.ico"
+!else
+  !define MUI_ICON "${ICON}"
+!endif
+  !define MUI_UNICON "${MUI_ICON}"
   !define MUI_HEADERIMAGE
+!ifndef HEADERIMAGE_BITMAP
   !define MUI_HEADERIMAGE_BITMAP "${HOME}\install-win32\install-whirl.bmp"
+!else
+  !define MUI_HEADERIMAGE_BITMAP ${HEADERIMAGE_BITMAP}
+!endif
   !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
   !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
@@ -176,8 +184,8 @@
   
   ;Things that need to be extracted on first (keep these lines before any File command!)
   ;Only useful for BZIP2 compression
-  
-  ReserveFile "${HOME}\install-win32\install-whirl.bmp"
+
+  ReserveFile "${MUI_HEADERIMAGE_BITMAP}"
 
 ;--------------------------------
 ;Macros
@@ -625,7 +633,7 @@ Section -post
   SetOutPath $INSTDIR
   File "${HOME}\install-win32\INSTALL-win32.txt"
   File "${HOME}\install-win32\license.txt"
-  File "${HOME}\install-win32\openvpn.ico"
+  File "/oname=openvpn.ico" "${MUI_ICON}"
 
   ; Create file association if requested
   SectionGetFlags ${SecFileAssociation} $R0
