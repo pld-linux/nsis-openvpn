@@ -10,7 +10,6 @@ Source0:	http://www.openvpn.se/files/install_packages_source/openvpn_install_sou
 # NoSource0-md5:	64fce7dc20fdd991ffdee2cfce9dfb0b
 NoSource:	0
 Source1:	openvpn-gui.nsi
-Patch1:		skip-components.patch
 Patch2:		options-override.patch
 Patch3:		defaults.patch
 Patch4:		install-hook.patch
@@ -29,7 +28,6 @@ OpenVPN installer for Windows.
 %prep
 %setup -qc
 cp -a %{SOURCE1} openvpn-gui.nsi
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1

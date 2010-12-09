@@ -106,7 +106,15 @@
 
   !define MUI_WELCOMEPAGE_TITLE "Welcome to the ${PRODUCT_NAME} Setup Wizard"
 
-  !define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of:\r\n\r\nOpenVPN -  an Open Source VPN package by James Yonan.\r\n\r\nOpenVPN GUI - A Graphical User Interface for OpenVPN by Mathias Sundman\r\n\r\nMy Certificate Wizard - A tool to create a certificate request by Vlada Macek\r\n\r\nNote that the Windows version of OpenVPN will only run on Win 2000, XP, or higher.\r\n\r\n\r\n"
+  !define WELCOMEPAGE_TEXT_OPENVPN "OpenVPN -  an Open Source VPN package by James Yonan.\r\n\r\n"
+  !define WELCOMEPAGE_TEXT_OPENVPNGUI "OpenVPN GUI - A Graphical User Interface for OpenVPN by Mathias Sundman\r\n\r\n"
+!ifdef SKIP_MYCERT
+  !define WELCOMEPAGE_TEXT_MYCERT ""
+!else
+  !define WELCOMEPAGE_TEXT_MYCERT "My Certificate Wizard - A tool to create a certificate request by Vlada Macek\r\n\r\n"
+!endif
+
+  !define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of:\r\n\r\n${WELCOMEPAGE_TEXT_OPENVPN}${WELCOMEPAGE_TEXT_OPENVPNGUI}${WELCOMEPAGE_TEXT_MYCERT}Note that the Windows version of OpenVPN will only run on Win 2000, XP, or higher.\r\n\r\n\r\n"
 
   !define MUI_COMPONENTSPAGE_TEXT_TOP "Select the components to install/upgrade.  Stop any OpenVPN or OpenVPN GUI processes or the OpenVPN service if it is running."
 
@@ -155,7 +163,9 @@
 
   LangString DESC_SecGUIAuto ${LANG_ENGLISH} "Automatically start OpenVPN GUI at system startup"
 
+!ifndef SKIP_MYCERT
   LangString DESC_SecMYCERT ${LANG_ENGLISH} "Install My Certificate Wizard - A tool to create a certificate request."
+!endif
 ;--------------------------------
 ;Data
   
@@ -231,6 +241,7 @@ Section "OpenVPN User-Space Components" SecOpenVPNUserSpace
 
 SectionEnd
 
+!ifndef SKIP_EASYRSA
 Section "OpenVPN RSA Certificate Management Scripts" SecOpenVPNEasyRSA
 
   SetOverwrite on
@@ -253,6 +264,7 @@ Section "OpenVPN RSA Certificate Management Scripts" SecOpenVPNEasyRSA
   File "${HOME}\easy-rsa\serial.start"
 
 SectionEnd
+!endif
 
 Section "OpenVPN GUI" SecGUI
 
@@ -261,13 +273,15 @@ Section "OpenVPN GUI" SecGUI
   File "${HOME}\openvpn-gui.exe"
 
   # Include your custom config file(s) here.
-  SetOutPath "$INSTDIR\config"
+;  SetOutPath "$INSTDIR\config"
   ;File "${HOME}\config\Office.ovpn"
 
+!ifndef SKIP_SAMPLE_CONFIG
   SetOutPath "$INSTDIR\sample-config"
   File "${HOME}\sample-config\sample.${SERV_CONFIG_EXT}"
   File "${HOME}\sample-config\client.${SERV_CONFIG_EXT}"
   File "${HOME}\sample-config\server.${SERV_CONFIG_EXT}"
+!endif
 
   SetOutPath "$INSTDIR"
   File "${HOME}\install-win32\OpenVPN GUI ReadMe.txt"
@@ -280,6 +294,7 @@ SectionEnd
 Section "AutoStart OpenVPN GUI" SecGUIAuto
 SectionEnd
 
+!ifndef SKIP_MYCERT
 Section "My Certificate Wizard" SecMYCERT
 
   SetOverwrite on
@@ -288,6 +303,7 @@ Section "My Certificate Wizard" SecMYCERT
   File "${HOME}\mycertwizard\mycert.ini"
 
 SectionEnd
+!endif
 
 Section "Hide the TAP-Win32 Virtual Ethernet Adapter" SecTAPHidden
 SectionEnd
@@ -307,11 +323,12 @@ Section "OpenVPN Service" SecService
   FileWrite $R0 "process will be instantiated for each configuration file.$\r$\n"
   FileClose $R0
 
+!ifndef SKIP_SAMPLE_CONFIG
   SetOutPath "$INSTDIR\sample-config"
   File "${HOME}\sample-config\sample.${SERV_CONFIG_EXT}"
   File "${HOME}\sample-config\client.${SERV_CONFIG_EXT}"
   File "${HOME}\sample-config\server.${SERV_CONFIG_EXT}"
-
+!endif
 
   CreateDirectory "$INSTDIR\log"
   FileOpen $R0 "$INSTDIR\log\README.txt" w
@@ -333,6 +350,7 @@ Section "OpenSSL DLLs" SecOpenSSLDLLs
 
 SectionEnd
 
+!ifndef SKIP_OPENSSL
 Section "OpenSSL Utilities" SecOpenSSLUtilities
 
   SetOverwrite on
@@ -340,6 +358,7 @@ Section "OpenSSL Utilities" SecOpenSSLUtilities
   File "${BIN}\openssl.exe"
 
 SectionEnd
+!endif
 
 Section "TAP-Win32 Virtual Ethernet Adapter" SecTAP
 
@@ -435,6 +454,7 @@ Section "Add Shortcuts to Start Menu" SecAddShortcuts
 
 nogui:
 
+!ifndef SKIP_MYCERT
   SectionGetFlags ${SecMYCERT} $R0
   IntOp $R0 $R0 & ${SF_SELECTED}
   IntCmp $R0 ${SF_SELECTED} "" nomycert nomycert
@@ -442,6 +462,7 @@ nogui:
   CreateShortCut "$SMPROGRAMS\OpenVPN\My Certificate Wizard.lnk" "$INSTDIR\bin\mycert.exe"
 
 nomycert:
+!endif
 
 SectionEnd
 
@@ -672,13 +693,19 @@ SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNUserSpace} $(DESC_SecOpenVPNUserSpace)
+!ifndef SKIP_EASYRSA
   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNEasyRSA} $(DESC_SecOpenVPNEasyRSA)
+!endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SecGUI} $(DESC_SecGUI)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecGUIAuto} $(DESC_SecGUIAuto)
+!ifndef SKIP_MYCERT
   !insertmacro MUI_DESCRIPTION_TEXT ${SecMYCERT} $(DESC_SecMYCERT)
+!endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SecTAP} $(DESC_SecTAP)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecTAPHidden} $(DESC_SecTAPHidden)
+!ifndef SKIP_OPENSSL
   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenSSLUtilities} $(DESC_SecOpenSSLUtilities)
+!endif
   !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenSSLDLLs} $(DESC_SecOpenSSLDLLs)
 ;  !insertmacro MUI_DESCRIPTION_TEXT ${SecOpenVPNSource} $(DESC_SecOpenVPNSource)
   !insertmacro MUI_DESCRIPTION_TEXT ${SecAddPath} $(DESC_SecAddPath)
@@ -725,8 +752,10 @@ Function .onInit
   Pop $R1
   Pop $R0
 
+!ifndef SKIP_MYCERT
   ;Disable My Certificate Wizard as default.
   SectionSetFlags ${SecMYCERT} 0
+!endif
 
   ; Don't install the TAP driver as hiddden as default.
   SectionSetFlags ${SecTAPHidden} 0
