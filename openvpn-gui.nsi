@@ -765,8 +765,14 @@ Function .onInit
   SectionSetFlags ${SecMYCERT} 0
 !endif
 
+  ; Don't install OpenVPN service by default
+  SectionSetFlags ${SecService} 0
+
   ; Don't install the TAP driver as hiddden as default.
   SectionSetFlags ${SecTAPHidden} 0
+
+  ; Don't include OpenVPN to PATH by default
+  SectionSetFlags ${SecAddPath} 0
 FunctionEnd
 
 Function .onSelChange
