@@ -218,8 +218,8 @@ FunctionEnd
 ;--------------------------------
 ;Installer Sections
 
-!define SF_SELECTED   1
-!define SF_RO         16
+;!define SF_SELECTED   1
+;!define SF_RO         16
 !define SF_NOT_RO     0xFFFFFFEF
 
 Section "OpenVPN User-Space Components" SecOpenVPNUserSpace
