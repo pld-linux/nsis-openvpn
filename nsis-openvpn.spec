@@ -9,6 +9,7 @@ URL:		http://openvpn.se/files/howto/openvpn-howto_roll_your_own_installation_pac
 Source0:	http://www.openvpn.se/files/install_packages_source/openvpn_install_source-%{version}-gui-1.0.3.zip
 # NoSource0-md5:	64fce7dc20fdd991ffdee2cfce9dfb0b
 NoSource:	0
+Source1:	openvpn-gui.nsi
 Patch0:		nsis-constants.patch
 Patch1:		skip-components.patch
 Patch2:		options-override.patch
@@ -28,7 +29,7 @@ OpenVPN installer for Windows.
 
 %prep
 %setup -qc
-%undos openvpn-gui.nsi
+cp -a %{SOURCE1} openvpn-gui.nsi
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
