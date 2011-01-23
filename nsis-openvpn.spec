@@ -12,6 +12,7 @@ NoSource:	0
 Source1:	openvpn-gui.nsi
 BuildRequires:	rpmbuild(macros) >= 1.553
 BuildRequires:	unix2dos
+BuildRequires:	unzip
 Requires:	nsis >= 2.34
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
